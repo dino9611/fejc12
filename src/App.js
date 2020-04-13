@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './App.css';
 
@@ -8,11 +8,37 @@ import Login from './component/login';
 import Register from './component/register';
 import Header from './component/header';
 import Verified from './component/verified';
+import Axios from 'axios';
+import { APIURL } from './supports/UrlApi';
+import {connect} from 'react-redux'
+import {Userregister2} from './redux/actions'
 
 
 
+function App(props) {
 
-function App() {
+  const [loading,setloading]=useState(true)
+
+
+  useEffect(()=>{
+    const userid=localStorage.getItem('userid')
+    if(userid){
+      Axios.get(`${APIURL}/users/keeplogin/${userid}`)
+      .then((res)=>{ 
+        props.Userregister2(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      }).finally(()=>{
+        setloading(false)
+      })
+    }else{
+      setloading(false)
+    }
+  },[])
+
+  if(loading){
+    return <div>Loading.....</div>
+  }
   return (
     <div>
       <Header/>
@@ -26,4 +52,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(null,{Userregister2}) (App);

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Axios from 'axios'
 import { APIURL } from '../supports/UrlApi';
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
+import {userRegister,Userregister2} from './../redux/actions'
+
 
 class Register extends Component {
     state = {
@@ -10,7 +14,8 @@ class Register extends Component {
     }
 
     onRegisinput=(e)=>{
-        this.setState({[e.target.name]:e.target.value})
+        console.log(e.target.name)
+        this.setState({[e.target.name]:e.target.value})//this.setstate({["username"]:apa yang diketik})
     }
 
     onRegister=()=>{
@@ -19,14 +24,20 @@ class Register extends Component {
             password:this.state.password,
             email:this.state.email
         }
+        // this.props.userRegister(data)
         Axios.post(`${APIURL}/users/register`,data)
         .then((res)=>{
             console.log(res.data)
+            localStorage.setItem('userid',res.data.id)
+            this.props.Userregister2(res.data)
         }).catch((err)=>{
             console.log(err)
         })
     }
-    render() { 
+    render() {
+        if(this.props.username){
+            return <Redirect to='/'/>
+        }
         return (
             <div className='d-flex justify-content-center align-items-center' style={{height:'80vh'}}>
                 <div>
@@ -46,5 +57,14 @@ class Register extends Component {
           );
     }
 }
- 
-export default Register;
+
+const MapstateToProps=(state)=>{
+    return{
+        username: state.Auth.username,
+        loading: state.Auth.loading,
+        // error: state.Auth.error 
+    }
+}
+
+
+export default connect(MapstateToProps,{userRegister,Userregister2})(Register);

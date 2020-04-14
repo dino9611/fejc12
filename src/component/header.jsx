@@ -13,6 +13,7 @@ import {
   DropdownItem,
   NavbarText
 } from 'reactstrap';
+import {connect} from 'react-redux'
 
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,15 +31,15 @@ const Header = (props) => {
               <NavLink href="/register">Register</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+              <NavLink href='/login'>Login</NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+                {props.username}
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                  Option 1
+                  {props.verified ? <span>Verified</span>:<span style={{color:"red"}}>unverified</span>}
                 </DropdownItem>
                 <DropdownItem>
                   Option 2
@@ -57,4 +58,13 @@ const Header = (props) => {
   );
 }
 
-export default Header;
+const MapstateToProps=(state)=>{
+  return{
+      username: state.Auth.username,
+      verified: state.Auth.verified,
+      // error: state.Auth.error 
+  }
+}
+
+
+export default connect(MapstateToProps)(Header);

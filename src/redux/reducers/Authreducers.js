@@ -2,6 +2,7 @@ const INITIAL_STATE={
     username:'',
     email:'',
     status:'',
+    verified:0,
     error:'',
     token:'',
     authchecked:false,

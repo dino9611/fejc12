@@ -81,6 +81,7 @@ function Home() {
       headers:
       {
           'Content-Type':'multipart/form-data',
+          
       },
     }
     formdata.append('image',editimagefile.editImageFile)

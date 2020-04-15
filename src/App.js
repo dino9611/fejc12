@@ -21,10 +21,15 @@ function App(props) {
 
 
   useEffect(()=>{
-    const userid=localStorage.getItem('userid')
-    if(userid){
-      Axios.get(`${APIURL}/users/keeplogin/${userid}`)
+    const token=localStorage.getItem('token')
+    if(token){
+      Axios.get(`${APIURL}/users/keeplogin`,{
+        headers:{
+          'Authorization':`Bearer ${token}`
+        }
+      })
       .then((res)=>{ 
+        localStorage.setItem('token',res.data.token)
         props.Userregister2(res.data)
       }).catch((err)=>{
         console.log(err)
